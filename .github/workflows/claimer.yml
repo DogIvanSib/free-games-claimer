@@ -2,30 +2,19 @@ name: Auto Claim Games
 
 on:
   schedule:
-    - cron: '0 16 * * *' # Автозапуск каждый день в 19:00 по Москве
-  workflow_dispatch: # Добавляет кнопку для запуска вручную
+    - cron: '0 16 * * *' # Каждый день в 19:00 по МСК
+  workflow_dispatch:
 
 jobs:
   claim:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: Claim Games
         uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      
+      - name: Run Claimer Script
+        uses: m9rco/epicgames-claimer-action@master
         with:
-          node-version: 20
-
-      - name: Install Dependencies
-        run: |
-          npm install
-          npx playwright install firefox --with-deps
-
-      - name: Run Claimer
-        env:
-          EG_EMAIL: ${{ secrets.EG_EMAIL }}
-          EG_PASSWORD: ${{ secrets.EG_PASSWORD }}
-          EG_OTPKEY: ${{ secrets.EG_OTPKEY }}
-          SHOW: 0
-        run: node epic-games.js
+          epic_email: ${{ secrets.EG_EMAIL }}
+          epic_password: ${{ secrets.EG_PASSWORD }}
+          epic_totp_secret: ${{ secrets.EG_OTPKEY }}
