@@ -23,7 +23,5 @@ jobs:
           npx playwright install firefox --with-deps
 
       - name: Run Epic Games Claimer
-        env:
-          EG_COOKIE: ${{ secrets.EG_COOKIE }}
-          SHOW: 0
-        run: node epic-games.js
+        run: |
+          node epic-games.js --email "${{ secrets.EG_EMAIL }}" --password "${{ secrets.EG_PASSWORD }}" --totp "${{ secrets.EG_OTPKEY }}"
